@@ -54,39 +54,61 @@
 						<article class="post">
 
   <header class="post-header">
-    <h1 class="post-title">The doctor is about to operate...</h1>
+    <h1 class="post-title">OpenCasemix</h1>
   </header>
 
   <div class="post-content">
-    <p><br /></p>
-<h2 id="openhis"><a href="/openhis">OpenHIS</a></h2>
-<p>This is an open source hospital information system designed for small or large facility. It contains all the essential modules for running a hospital from patient registration to billing. Built entirely on top of open source technologies to ensure sustainability and great support from community.</p>
-
-<p>View this project on <a href="https://github.com/shamsulamri/openhis">Github</a>.
-<br /></p>
+    <h2 id="definition">Definition</h2>
 <hr />
 
-<h2 id="clinical-pathway">Clinical Pathway</h2>
+<p>Casemix is a classification of patients treatment episodes designed to create classes which are relatively homogenous in respect of the resources used and contain patients with similar clinical characteristics; refers to the range and types of patients a hospital treats</p>
 
-<p>Many years ago I came across a win32 application that captures my attention. It is a clincal application with a unique method of entering clinical notes. The hardest part of any clinical application is the data entry. Clinical data contain structured and unstructured information which is quite challenging to input.</p>
+<p><em>(George Palmer, Beth Reid)</em></p>
 
-<p>View this project on <a href="https://github.com/shamsulamri/clinical_pathway">Github</a>.
-<br /></p>
+<p>Casemix is a system that measures hospital performance, aiming to reward initiatives that increase efficiency in hospitals. It also serves as an information tool that allows policy makers to understand the nature and complexity of health care delivery.</p>
+
+<p><em>(Wikipedia)</em></p>
+
+<p>Business intelligence tool for healthcare.</p>
+
+<p><em>(Me)</em></p>
+
+<h2 id="requirements">Requirements</h2>
 <hr />
 
-<h2 id="icd-dataset">ICD Dataset</h2>
+<ul>
+  <li>Major Diagnostic Criteria (MDC)</li>
+  <li>Diagnosis Related Group (DRG)</li>
+  <li>Severity of Illness (SOI)</li>
+  <li>Clinical Codes (ICD10 &amp; ICD9CM)</li>
+  <li>Grouper</li>
+</ul>
 
-<p>This is a collection of ICD-10 and ICD-9M (Procedure codes) which is commonly use for disease and procedure classification. I have also created API if you wish to consume the dataset from your application.</p>
+<h4 id="major-diagnostic-criteria-mdc">Major Diagnostic Criteria (MDC)</h4>
 
-<p>Please visit <a href="https://iodojo.com">iodojo.com</a> for details on how to access the API.</p>
+<ul>
+  <li>MDC is the root classification</li>
+  <li>There are 24 criterias</li>
+</ul>
 
-<p>View this project on <a href="https://github.com/shamsulamri/icd_codes">Github</a>.</p>
+<p><img src="/assets/img/casemix/mdc.png" class="img-fluid border border-secondary" /></p>
 
-<hr />
+<h4 id="diagnostic-related-group-drg">Diagnostic Related Group (DRG)</h4>
 
-<h2 id="opencasemix"><a href="/casemix">OpenCasemix</a></h2>
+<ul>
+  <li>Sub-class of MDC</li>
+  <li>DRG can be further subdivided into:
+    <ul>
+      <li>Medical</li>
+      <li>Surgical</li>
+    </ul>
+  </li>
+  <li>Below is an example of a DRG</li>
+</ul>
 
-<p>This is my implementation of an OpenCasemix.</p>
+<p><img src="/assets/img/casemix/drg.png" class="img-fluid border border-secondary" /></p>
+
+<p>More coming soon…</p>
 
   </div>
 
