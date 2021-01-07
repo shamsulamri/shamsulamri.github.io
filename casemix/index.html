@@ -58,7 +58,9 @@
   </header>
 
   <div class="post-content">
-    <h2 id="definition">Definition</h2>
+    <p>The main objective of OpenCasemix is to show and explain on how to design a custom casemix system for your hospital need. I will also upload source code for the grouper and sample dataset to implement a working application.</p>
+
+<h2 id="definition">Definition</h2>
 <hr />
 
 <p>Casemix is a classification of patients treatment episodes designed to create classes which are relatively homogenous in respect of the resources used and contain patients with similar clinical characteristics; refers to the range and types of patients a hospital treats</p>
@@ -73,8 +75,40 @@
 
 <p><em>(Me)</em></p>
 
-<h2 id="requirements">Requirements</h2>
+<h2 id="modules">Modules</h2>
 <hr />
+
+<p>Casemix can be divided into two modules:</p>
+
+<ul>
+  <li>Clinical Module</li>
+  <li>Costing Module</li>
+</ul>
+
+<h2 id="clinical-module">Clinical Module</h2>
+<hr />
+
+<p>The clinical module is responsible for class assignment based on clinical inputs. The inputs are:</p>
+
+<ul>
+  <li>Demographic data
+    <ul>
+      <li>Age</li>
+      <li>Gender</li>
+    </ul>
+  </li>
+  <li>Clinical data
+    <ul>
+      <li>Principal diagnosis</li>
+      <li>Principal procedure</li>
+      <li>Morbidity/Mortality</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Based on the inputs above, the ouput is a DRG group which will be assigned to the case.</p>
+
+<p>The components of this modules are:</p>
 
 <ul>
   <li>Major Diagnostic Criteria (MDC)</li>
@@ -84,6 +118,13 @@
   <li>Grouper</li>
 </ul>
 
+<p>Pre-requisite:</p>
+
+<ul>
+  <li>Casting of ICD codes to DRG classes</li>
+  <li>Logic or decision tree</li>
+</ul>
+
 <h4 id="major-diagnostic-criteria-mdc">Major Diagnostic Criteria (MDC)</h4>
 
 <ul>
@@ -91,7 +132,7 @@
   <li>There are 24 criterias</li>
 </ul>
 
-<p><img src="/assets/img/casemix/mdc.png" class="img-fluid border border-secondary" /></p>
+<p><img src="/assets/img/casemix/mdc.png" class="img-fluid" /></p>
 
 <h4 id="diagnostic-related-group-drg">Diagnostic Related Group (DRG)</h4>
 
@@ -99,16 +140,65 @@
   <li>Sub-class of MDC</li>
   <li>DRG can be further subdivided into:
     <ul>
-      <li>Medical</li>
-      <li>Surgical</li>
+      <li>Medical
+        <ul>
+          <li>Determined by principal diagnossis.</li>
+        </ul>
+      </li>
+      <li>Surgical
+        <ul>
+          <li>Determined by principal procedure.</li>
+          <li>Will overide medical DRG if a principal procedure is available.</li>
+        </ul>
+      </li>
     </ul>
   </li>
   <li>Below is an example of a DRG list from MDC ‘02 Disease &amp; Disorder of the Eye’</li>
 </ul>
 
-<p><img src="/assets/img/casemix/drg.png" class="img-fluid border border-secondary" /></p>
+<p><img src="/assets/img/casemix/drg.png" class="img-fluid" /></p>
 
-<p>More coming soon…</p>
+<ul>
+  <li>The DRG code are divided into 3 sections as depicted by the image below:</li>
+</ul>
+
+<p><img width="70%" src="/assets/img/casemix/drg_structure.png" class="img-fluid mx-auto d-block" /></p>
+
+<h4 id="severity-of-illness-soi">Severity of Illness (SOI)</h4>
+
+<p>Each DRG can be further classified into 3 severity of illness which is reflected by the last digit of each code. The level of severity is determined by the type co-morbidities or complications.</p>
+
+<p><img width="70%" src="/assets/img/casemix/soi.png" class="rounded mx-auto d-block" /></p>
+
+<h4 id="icd10--icd9cm">ICD10 &amp; ICD9CM</h4>
+
+<p>The algorithm uses the following codes to assign a case DRG:</p>
+
+<ul>
+  <li>International Statistical Classification of Diseases and Related Health Problems 10th Revision</li>
+  <li>International Classification of Diseases, 9th Revision, Clinical Modification (Procedure Codes)</li>
+  <li>You can download the ICD10 and ICD9CM code from my <a href="https://github.com/shamsulamri">github</a> page.</li>
+</ul>
+
+<p>All the ICD10 and ICD9CM codes must be cast to either medical or surgical DRG group. Casting is an important process required to be done before it can be included in the algorithm. However it is not cast in stone and can be modified based on your requirement.</p>
+
+<p>Example of a medical DRG:</p>
+
+<p><img src="/assets/img/casemix/drg_medical.png" class="img-fluid" /></p>
+
+<p>Example of a surgical DRG:</p>
+
+<p><img src="/assets/img/casemix/drg_surgical.png" class="img-fluid" /></p>
+
+<h4 id="grouper">Grouper</h4>
+
+<p>This is an algorithm which takes clincal and demographic data as input and assign a corresponding DRG as an output.</p>
+
+<p>Decision tree for classification where the input is the clinical and demographic data and the output is DRG.</p>
+
+<p><img src="/assets/img/casemix/algorithm.png" class="img-fluid" /></p>
+
+<h5 id="more-coming-soon">More coming soon…</h5>
 
   </div>
 
