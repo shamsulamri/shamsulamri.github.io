@@ -60,6 +60,8 @@
   <div class="post-content">
     <p>The main objective of OpenCasemix is to show and explain on how to design a custom casemix system for your hospital need. I will also upload source code for the grouper and sample dataset to implement a working application. The code will be written in Python and the database is MySQL.</p>
 
+<p>View this project on <a href="https://github.com/shamsulamri/opencasemix">Github</a>.</p>
+
 <h2 id="definition">Definition</h2>
 <hr />
 
@@ -172,7 +174,7 @@
 
 <h4 id="icd10--icd9cm">ICD10 &amp; ICD9CM</h4>
 
-<p>The algorithm uses the following codes to assign a case DRG:</p>
+<p>DRG groups are made up of ICD10 and ICD9CM codes. These code will further classify each DRG into medical or surgical DRG. This casting process is not fixed and you can use modify or rearrange them according to your requirement.</p>
 
 <ul>
   <li>International Statistical Classification of Diseases and Related Health Problems 10th Revision</li>
@@ -180,21 +182,21 @@
   <li>You can download the ICD10 and ICD9CM code from my <a href="https://github.com/shamsulamri">github</a> page.</li>
 </ul>
 
-<p>All the ICD10 and ICD9CM codes must be cast to either medical or surgical DRG group. Casting is an important process required to be done before it can be included in the algorithm. However it is not cast in stone and can be modified based on your requirement.</p>
-
-<p>Example of a medical DRG:</p>
+<p>Medical DRG will consist of ICD10 codes. Example of a medical DRG:</p>
 
 <p><img src="/assets/img/casemix/drg_medical.png" class="img-fluid" /></p>
 
-<p>Example of a surgical DRG:</p>
+<p>Surgical DRG will consist of ICD9CM codes. Example of a surgical DRG:</p>
 
 <p><img src="/assets/img/casemix/drg_surgical.png" class="img-fluid" /></p>
 
+<div class="alert alert-warning">
+Note: X is severity of illness (1,2 or 3)
+</div>
+
 <h4 id="grouper">Grouper</h4>
 
-<p>This is an algorithm which takes clincal and demographic data as input and assign a corresponding DRG as an output.</p>
-
-<p>Decision tree for classification where the input is the clinical and demographic data and the output is DRG.</p>
+<p>This is an algorithm which takes clincal and demographic data as input and assign a corresponding DRG as an output. Below is an example of a decision tree for DRG assignment where the input is the clinical and demographic data and the output is DRG.</p>
 
 <p><img src="/assets/img/casemix/algorithm.png" class="img-fluid" /></p>
 
