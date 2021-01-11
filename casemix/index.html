@@ -101,6 +101,7 @@
   </li>
   <li>Clinical data
     <ul>
+      <li>Length of Stay</li>
       <li>Principal diagnosis</li>
       <li>Principal procedure</li>
       <li>Morbidity/Mortality</li>
@@ -199,6 +200,63 @@ Note: X is severity of illness (1,2 or 3)
 <p>This is an algorithm which takes clincal and demographic data as input and assign a corresponding DRG as an output. Below is an example of a decision tree for DRG assignment where the input is the clinical and demographic data and the output is DRG.</p>
 
 <p><img src="/assets/img/casemix/algorithm.png" class="img-fluid" /></p>
+
+<h2 id="costing-module">Costing Module</h2>
+<hr />
+
+<p>The main objective of this module is to calculate:</p>
+
+<ul>
+  <li>Cost per case</li>
+  <li>Average cost per case</li>
+  <li>Global average cost per case</li>
+  <li>Case group weight (CGW)</li>
+  <li>Hospital base rate</li>
+  <li>Casemix index</li>
+</ul>
+
+<h4 id="cost-per-case">Cost per case</h4>
+
+<p>Cost per case is the amount of cost to manage a case.</p>
+
+<ul>
+  <li>Cost per case = cost per bedday x length of stay (LOS)</li>
+</ul>
+
+<h4 id="average-cost-per-case">Average cost per case</h4>
+
+<p>The next step is to calculate the average cost per case. However outlier cases must first be discarded from the group. Outliers are cases where the length of stay differs significantly from others.</p>
+
+<p><img width="70%" src="/assets/img/casemix/average_cost_per_case.png" class="img-fluid mx-auto d-block" /></p>
+
+<h4 id="global-average-per-case">Global average per case</h4>
+
+<p>Global average cost per case can be derived from the weighted average of the cost per case in each case group.</p>
+
+<p><img width="70%" src="/assets/img/casemix/global_average_per_case.png" class="img-fluid mx-auto d-block" /></p>
+
+<h4 id="case-group-weight-cgw">Case group weight (CGW)</h4>
+
+<p>In short it is the ratio of average cost per case against global average cost per case.</p>
+
+<p><img width="70%" src="/assets/img/casemix/cgw.png" class="img-fluid mx-auto d-block" /></p>
+
+<p><em>i - group</em><br />
+<em>h - hospital</em></p>
+
+<h4 id="hospital-base-rate">Hospital base rate</h4>
+
+<p>Hospital base rate is the sum of direct and indirect cost divided by the total number of the cases.</p>
+
+<h4 id="casemix-index">Casemix Index</h4>
+
+<p>Casemix index represents the resource intensity of cases treated in a hospital.</p>
+
+<p><img src="/assets/img/casemix/cmi.png" class="img-fluid mx-auto d-block" /></p>
+
+<p><em>i - group</em><br />
+<em>h - hospital</em><br />
+<em>t-1 - previous year</em></p>
 
 <h5 id="more-coming-soon">More coming soon…</h5>
 
