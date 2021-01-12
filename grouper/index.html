@@ -58,7 +58,7 @@
   </header>
 
   <div class="post-content">
-    <p>The most important part in the clinical module is the grouper. The grouper takes demographic and clinical inputs and assign a DRG to the case.</p>
+    <p>The most important part in the clinical module is the grouper and sometimes it is also regarded as the heart of casemix. A working grouper is essential to the success of the application. In this section, I will show and explain how the grouper works in code. Once you understand the basic mechanism of the grouper additional rules or modification can be made to suit your need.</p>
 
 <p>Back to casemix <a href="/casemix">main page</a></p>
 
@@ -142,7 +142,6 @@ def getSurgicalDRG(cast_code, gender):
         left join drg_bases b on (a.base_code = b.base_code)
         where cast_code = '%s'
         and (b.gender_code='%s' or b.gender_code is null)
-        and mdc_code&lt;&gt;'25'
         %s
     """ %(cast_code, gender, sql_age)
 
@@ -177,6 +176,13 @@ def getSeverity(diagnoses):
 </pre>
 </code>
 </div>
+
+<h4 id="notes">Notes</h4>
+
+<ul>
+  <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
+  <li>cc and mcc array inside getSeverity function is a list of icd10 codes to determine the severity of the case. ICD codes inside CC will set the outcome to SOI2 while MCC will decide on SOI3. You may add icd codes to the array accordingly. If the ICD code does not fall into any one of them it will be considered as SOI1.</li>
+</ul>
 
 <p>Finally the grouper in action:</p>
 
@@ -241,6 +247,13 @@ else:
 <p>Output:</p>
 
 <p><code class="language-plaintext highlighter-rouge">DRG: 02012</code></p>
+
+<h4 id="notes-1">Notes</h4>
+
+<ul>
+  <li>Age must be in days</li>
+  <li>Ungroupable is a bin where ICD10 codes in not defined anywhere in the drg castings. They require attention and need to be assigned under a correct DRG.</li>
+</ul>
 
 <h4 id="explanation-coming-soon">Explanation coming soon…</h4>
 
