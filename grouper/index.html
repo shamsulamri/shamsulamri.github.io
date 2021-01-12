@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grouper in Action</title>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<script type="text/javascript" src="/assets/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/moment.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.mask.min.js"></script>
+
+<style>
+		html {
+		  font-size: 14px;
+		}
+		@media (min-width: 768px) {
+		  html {
+			font-size: 16px;
+		  }
+		}
+
+		.container {
+		  max-width: 960px;
+		}
+
+		.border-top { border-top: 1px solid #e5e5e5; }
+		.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+		.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2PQ43FQCD3"></script>
+<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-2PQ43FQCD3');
+</script>
+
+</head>
+<body>
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+				<h5 class="my-0 mr-md-auto font-weight-normal"><a class='text-dark' href="/">Shamsul Amri, M.D</a></h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/about">About</a>
+      </nav>
+    </div>
+		<main role="main" class="container">
+				<div class="row justify-content-center">
+				<div class='col-10'>
+						<article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Grouper in Action</h1>
+  </header>
+
+  <div class="post-content">
+    <p>The most important part in the clinical module is the grouper. The grouper takes demographic and clinical inputs and assign a DRG to the case.</p>
+
+<p>Back to casemix <a href="/casemix">main page</a></p>
+
+<h2 id="requirement">Requirement</h2>
+<hr />
+
+<ul>
+  <li>Python3</li>
+  <li>Jupyter Notebook (optional)</li>
+</ul>
+
+<h2 id="source-code">Source Code</h2>
+<hr />
+
+<p>First and foremost you need to download and restore the database included in the repository. Just run the opencasemix.sql and start your notebook.</p>
+
+<p>Let’s first establish connection to the database:</p>
+
+<div class="alert alert-secondary">
+<code>
+<pre>
+import sqlalchemy as db
+
+engine = db.create_engine('mysql+mysqlconnector://username:password@ipaddress:3306/opencasemix')
+con = engine.connect()
+con
+</pre>
+</code>
+</div>
+
+<p>Before running make sure you change the connection paramters (<em>username, password</em> and <em>ipaddress</em>).</p>
+
+<p>Output:</p>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;sqlalchemy.engine.base.Connection at 0x7ff8f8c66e20&gt;</code></p>
+
+<p>The following code declares functions required by the grouper.</p>
+
+<div class="alert alert-secondary">
+<code>
+<pre>
+def getPrincipalDiagnosis(diagnoses):
+    code = diagnoses[0] if diagnoses is not None else None
+    return code
+
+def getMedicalDRG(cast_code, gender):
+    if (patient_age&gt;28):
+        sql_age = "and mdc_code&lt;&gt;'15'"
+
+    sql = """
+        select base_name, a.base_code
+        from drg_cast a
+        left join drg_bases b on (a.base_code = b.base_code)
+        where cast_code = '%s'
+        and (b.gender_code='%s' or b.gender_code is null)
+        %s
+    """ %(cast_code, gender, sql_age)
+
+    drg_bases = engine.execute(sql).fetchall()
+
+    if drg_bases:
+        return drg_bases[0]['base_code']
+    else:
+        return None
+
+def getPrincipalProcedure(procedures):
+    code = procedures[0] if procedures is not None else None
+    return code
+
+def getSurgicalDRG(cast_code, gender):
+    sql_age = ""
+
+    if (patient_age&gt;7):
+        sql_age = "and mdc_code&lt;&gt;'15'"
+    else:
+        sql_age = "and mdc_code='15'"
+
+    sql = """
+        select base_name, a.base_code
+        from drg_cast a
+        left join drg_bases b on (a.base_code = b.base_code)
+        where cast_code = '%s'
+        and (b.gender_code='%s' or b.gender_code is null)
+        and mdc_code&lt;&gt;'25'
+        %s
+    """ %(cast_code, gender, sql_age)
+
+    drg_bases = engine.execute(sql).fetchall()
+
+    if drg_bases:
+        return drg_bases[0]['base_code']
+    else:
+        return None
+
+def getSeverity(diagnoses):
+    
+    # Complication or comorbidities (cc)
+    cc = ['H33.3']
+
+    # Major complication or comorbidities (ccm)
+    mcc = ['A10.1']
+
+    drg_severity = 1
+    
+    # Has diagnosis in CC or MCC ?   
+    # Remove principal diagnosis from the list
+    diagnoses.pop(0)
+    
+    for diagnosis in diagnoses:
+        if diagnosis in cc:
+            drg_severity = 2        
+        if diagnosis in mcc:
+            drg_severity = 3 
+
+	return drg_severity
+</pre>
+</code>
+</div>
+
+<p>Finally the grouper in action:</p>
+
+<div class="alert alert-secondary">
+<code>
+<pre>
+base_code = None
+
+# Gender = male|female
+patient_gender = "male"
+
+# Age in days
+patient_age = 20*365
+
+# diagnoses is an array where the first item is principal diagnosis 
+# followed by co-morbidities 
+diagnoses = ['P39.1','H33.3','A11.1']
+#diagnoses = [None,'H33.4','A11.1']
+#diagnoses = ['XXXXXXX']
+
+# procedures is an array where the first item is principal procedure
+# followed by secondary procedures
+procedures = ['16.89','11.12']
+#procedures = [None,'B']
+#procedures = None
+
+# Start
+principal_diagnosis = getPrincipalDiagnosis(diagnoses)
+
+# Has principal procedure ?
+if principal_diagnosis:
+    base_code = getMedicalDRG(principal_diagnosis, patient_gender)
+    if base_code is not None:
+    
+        # Has OT procedure ?
+        if (procedures is not None):
+
+            principal_procedure = getPrincipalProcedure(procedures)
+
+            if principal_procedure is not None:
+                surgical_drg = getSurgicalDRG(principal_procedure, patient_gender)
+                if surgical_drg is not None:
+                    # Override base code
+                    base_code = surgical_drg
+
+        # Set drg severity   
+        drg_severity = getSeverity(diagnoses)
+
+        drg_code = "%s%s" %(base_code, drg_severity)
+        print("DRG: %s" %(drg_code))
+    else:
+        # This is where the ICD10 diagnosis is not located anywhere in casting
+        # and required to be assigned to a DRG
+        print("Ungroupable: %s"%(principal_diagnosis))
+else:
+    # End if no principal diagnosis
+    print("No principal diagnosis")
+</pre>
+</code>
+</div>
+
+<p>Output:</p>
+
+<p><code class="language-plaintext highlighter-rouge">DRG: 02012</code></p>
+
+
+  </div>
+
+</article>
+
+				</div>
+				</div>
+		</main>
+				<br>
+				<br>
+</body>
+
+</html>
