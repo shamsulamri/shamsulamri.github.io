@@ -131,10 +131,8 @@ def getPrincipalProcedure(procedures):
 def getSurgicalDRG(cast_code, gender):
     sql_age = ""
 
-    if (patient_age&gt;7):
+    if (patient_age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
-    else:
-        sql_age = "and mdc_code='15'"
 
     sql = """
         select base_name, a.base_code
@@ -181,7 +179,7 @@ def getSeverity(diagnoses):
 
 <ul>
   <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
-  <li>cc and mcc array inside getSeverity function is a list of icd10 codes to determine the severity of the case. ICD codes inside CC will set the outcome to SOI2 while MCC will decide on SOI3. You may add icd codes to the array accordingly. If the ICD code does not fall into any one of them it will be considered as SOI1.</li>
+  <li><em>cc</em> and <em>mcc</em> array inside getSeverity function is a list of ICD10 codes to determine the severity of the case. ICD10 codes inside CC will set the outcome to SOI2 while MCC will set to SOI3. If the ICD10 code does not fall into any one of them it will be considered as SOI1. You may add ICD10 codes to the arrays accordingly.</li>
 </ul>
 
 <p>Finally the grouper in action:</p>
