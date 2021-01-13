@@ -82,6 +82,30 @@
 <div class="alert alert-secondary">
 <code>
 <pre>
+import sqlalchemy as db
+
+engine = db.create_engine('mysql+mysqlconnector://username:password@ipaddress:3306/opencasemix')
+con = engine.connect()
+con
+</pre>
+</code>
+</div>
+
+<h5 id="notes">Notes</h5>
+
+<ul>
+  <li>Before running make sure you change the connection paramters (<em>username, password</em> and <em>ipaddress</em>).</li>
+</ul>
+
+<p>Output:</p>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;sqlalchemy.engine.base.Connection at 0x7ff8f8c66e20&gt;</code></p>
+
+<p>The following code declares functions required by the grouper.</p>
+
+<div class="alert alert-secondary">
+<code>
+<pre>
 def getDRG(code):
     sql = "select * from drg where drg_code='%s'"%(code)
     result = engine.execute(sql, code=code)
@@ -168,7 +192,7 @@ def getSeverity(diagnoses):
 </code>
 </div>
 
-<h5 id="notes">Notes</h5>
+<h5 id="notes-1">Notes</h5>
 
 <ul>
   <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
@@ -240,9 +264,9 @@ else:
 
 <p>Output:</p>
 
-<p><code class="language-plaintext highlighter-rouge">DRG: 02012 ORBITAL PROCEDURES (W CC)</code></p>
+<p><code class="language-plaintext highlighter-rouge">DRG: 02012</code></p>
 
-<h5 id="notes-1">Notes</h5>
+<h5 id="notes-2">Notes</h5>
 
 <ul>
   <li>Age must be in days</li>
