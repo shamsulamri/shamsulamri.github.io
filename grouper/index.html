@@ -73,6 +73,8 @@
 <h2 id="source-code">Source Code</h2>
 <hr />
 
+<p>Download source at <a href="https://github.com/shamsulamri/opencasemix">GitHub</a></p>
+
 <p>First and foremost you need to download and restore the database included in the repository. Just run the opencasemix.sql and start your notebook.</p>
 
 <p>Let’s first establish connection to the database:</p>
@@ -89,7 +91,11 @@ con
 </code>
 </div>
 
-<p>Before running make sure you change the connection paramters (<em>username, password</em> and <em>ipaddress</em>).</p>
+<h5 id="notes">Notes</h5>
+
+<ul>
+  <li>Before running make sure you change the connection paramters (<em>username, password</em> and <em>ipaddress</em>).</li>
+</ul>
 
 <p>Output:</p>
 
@@ -110,7 +116,7 @@ def getPrincipalDiagnosis(diagnoses):
     code = diagnoses[0] if diagnoses is not None else None
     return code
 
-def getMedicalDRG(cast_code, gender):
+def getMedicalDRG(cast_code, gender, age):
     if (age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
 
@@ -134,7 +140,7 @@ def getPrincipalProcedure(procedures):
     code = procedures[0] if procedures is not None else None
     return code
 
-def getSurgicalDRG(cast_code, gender):
+def getSurgicalDRG(cast_code, gender, age):
     sql_age = ""
 
     if (age&gt;28):
@@ -181,7 +187,7 @@ def getSeverity(diagnoses):
 </code>
 </div>
 
-<h4 id="notes">Notes</h4>
+<h5 id="notes-1">Notes</h5>
 
 <ul>
   <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
@@ -254,7 +260,7 @@ else:
 
 <p><code class="language-plaintext highlighter-rouge">DRG: 02012</code></p>
 
-<h4 id="notes-1">Notes</h4>
+<h5 id="notes-2">Notes</h5>
 
 <ul>
   <li>Age must be in days</li>
