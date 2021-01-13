@@ -100,12 +100,18 @@ con
 <div class="alert alert-secondary">
 <code>
 <pre>
+def getDRG(code):
+    sql = "select * from drg where drg_code='%s'" %(code)
+    result = engine.execute(sql)
+    drg = result.fetchone()
+    return drg 
+
 def getPrincipalDiagnosis(diagnoses):
     code = diagnoses[0] if diagnoses is not None else None
     return code
 
 def getMedicalDRG(cast_code, gender):
-    if (patient_age&gt;28):
+    if (age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
 
     sql = """
@@ -131,7 +137,7 @@ def getPrincipalProcedure(procedures):
 def getSurgicalDRG(cast_code, gender):
     sql_age = ""
 
-    if (patient_age&gt;28):
+    if (age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
 
     sql = """
@@ -212,7 +218,7 @@ principal_diagnosis = getPrincipalDiagnosis(diagnoses)
 
 # Has principal procedure ?
 if principal_diagnosis:
-    base_code = getMedicalDRG(principal_diagnosis, patient_gender)
+    base_code = getMedicalDRG(principal_diagnosis, patient_gender, patient_age)
     if base_code is not None:
     
         # Has OT procedure ?
@@ -221,7 +227,7 @@ if principal_diagnosis:
             principal_procedure = getPrincipalProcedure(procedures)
 
             if principal_procedure is not None:
-                surgical_drg = getSurgicalDRG(principal_procedure, patient_gender)
+                surgical_drg = getSurgicalDRG(principal_procedure, patient_gender, patient_age)
                 if surgical_drg is not None:
                     # Override base code
                     base_code = surgical_drg
@@ -230,7 +236,9 @@ if principal_diagnosis:
         drg_severity = getSeverity(diagnoses)
 
         drg_code = "%s%s" %(base_code, drg_severity)
-        print("DRG: %s" %(drg_code))
+        
+        drg = getDRG(drg_code)
+        print("DRG: %s %s" %(drg['drg_code'], drg['drg_name']))
     else:
         # This is where the ICD10 diagnosis is not located anywhere in casting
         # and required to be assigned to a DRG
@@ -253,7 +261,7 @@ else:
   <li>Ungroupable is a bin where ICD10 codes in not defined anywhere in the drg castings. They require attention and need to be assigned under a correct DRG.</li>
 </ul>
 
-<h4 id="explanation-coming-soon">Explanation coming soon…</h4>
+<h4 id="more-explanation-coming-soon">More explanation coming soon…</h4>
 
   </div>
 
