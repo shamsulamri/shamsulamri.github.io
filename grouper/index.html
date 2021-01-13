@@ -101,7 +101,7 @@ con
 
 <p><code class="language-plaintext highlighter-rouge">&lt;sqlalchemy.engine.base.Connection at 0x7ff8f8c66e20&gt;</code></p>
 
-<p>The following code declares functions required by the grouper.</p>
+<p>Below are functions required by the grouper.</p>
 
 <div class="alert alert-secondary">
 <code>
@@ -197,7 +197,8 @@ def getSeverity(diagnoses):
 <ul>
   <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
   <li><em>cc</em> and <em>mcc</em> array inside getSeverity function is a list of ICD10 codes to determine the severity of the case. ICD10 codes inside CC will set the outcome to SOI2 while MCC will set to SOI3. If the ICD10 code does not fall into any one of them it will be considered as SOI1. You may add ICD10 codes to the arrays accordingly.</li>
-  <li>ICD10 codes in MCC is dominant than in CC</li>
+  <li>ICD10 codes in MCC is dominant than in CC.</li>
+  <li>Some of the DRG are age and gender sensitive.</li>
 </ul>
 
 <p>Finally the grouper in action:</p>
@@ -273,7 +274,21 @@ else:
   <li>Ungroupable is a bin where ICD10 codes in not defined anywhere in the drg castings. They require attention and need to be assigned under a correct DRG.</li>
 </ul>
 
-<h4 id="more-explanation-coming-soon">More explanation coming soon…</h4>
+<h2 id="its-alive">It’s alive</h2>
+<hr />
+
+<p>Once you have a working grouper the next step would be to merge the output with the costing information. However in order to have a complete grouper you need to build up a working dataset for the grouper to consume. They are:</p>
+
+<ul>
+  <li>List of DRG (medical and surgical)</li>
+  <li>Cast ICD10 and ICD9CM to DRGs</li>
+  <li>Decide your CC and MCC list</li>
+</ul>
+
+<p>The next step is quite simple and if you understand the calculations in the <a href="/casemix">Costing Module</a> it is just a matter of translating them into codes.</p>
+
+<p><br /></p>
+
 
   </div>
 
