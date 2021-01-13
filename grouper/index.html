@@ -82,41 +82,21 @@
 <div class="alert alert-secondary">
 <code>
 <pre>
-import sqlalchemy as db
-
-engine = db.create_engine('mysql+mysqlconnector://username:password@ipaddress:3306/opencasemix')
-con = engine.connect()
-con
-</pre>
-</code>
-</div>
-
-<h5 id="notes">Notes</h5>
-
-<ul>
-  <li>Before running make sure you change the connection paramters (<em>username, password</em> and <em>ipaddress</em>).</li>
-</ul>
-
-<p>Output:</p>
-
-<p><code class="language-plaintext highlighter-rouge">&lt;sqlalchemy.engine.base.Connection at 0x7ff8f8c66e20&gt;</code></p>
-
-<p>The following code declares functions required by the grouper.</p>
-
-<div class="alert alert-secondary">
-<code>
-<pre>
 def getDRG(code):
-    sql = "select * from drg where drg_code='%s'" %(code)
-    result = engine.execute(sql)
+    sql = "select * from drg where drg_code='%s'"%(code)
+    result = engine.execute(sql, code=code)
     drg = result.fetchone()
-    return drg 
+
+    return drg    
 
 def getPrincipalDiagnosis(diagnoses):
     code = diagnoses[0] if diagnoses is not None else None
     return code
 
 def getMedicalDRG(cast_code, gender, age):
+    gender_code = gender if gender is not None else ""
+    sql_age = ""
+    
     if (age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
 
@@ -125,36 +105,37 @@ def getMedicalDRG(cast_code, gender, age):
         from drg_cast a
         left join drg_bases b on (a.base_code = b.base_code)
         where cast_code = '%s'
-        and (b.gender_code='%s' or b.gender_code is null)
+        and (b.gender_code= '%s' or b.gender_code is null)
         %s
-    """ %(cast_code, gender, sql_age)
-
+    """ %(cast_code, gender_code, sql_age)
+    
     drg_bases = engine.execute(sql).fetchall()
 
     if drg_bases:
         return drg_bases[0]['base_code']
     else:
         return None
-
+    
 def getPrincipalProcedure(procedures):
     code = procedures[0] if procedures is not None else None
     return code
 
-def getSurgicalDRG(cast_code, gender, age):
+def getSurgicalDRG(cast_code, gender,age):
+    gender_code = gender if gender is not None else ""
     sql_age = ""
-
+    
     if (age&gt;28):
         sql_age = "and mdc_code&lt;&gt;'15'"
-
+    
     sql = """
         select base_name, a.base_code
         from drg_cast a
         left join drg_bases b on (a.base_code = b.base_code)
         where cast_code = '%s'
-        and (b.gender_code='%s' or b.gender_code is null)
+        and (b.gender_code=  '%s' or b.gender_code is null)
         %s
-    """ %(cast_code, gender, sql_age)
-
+    """ %(cast_code, gender_code, sql_age)
+    
     drg_bases = engine.execute(sql).fetchall()
 
     if drg_bases:
@@ -180,18 +161,19 @@ def getSeverity(diagnoses):
         if diagnosis in cc:
             drg_severity = 2        
         if diagnosis in mcc:
-            drg_severity = 3 
-
-	return drg_severity
+            drg_severity = 3  
+            
+    return drg_severity    
 </pre>
 </code>
 </div>
 
-<h5 id="notes-1">Notes</h5>
+<h5 id="notes">Notes</h5>
 
 <ul>
   <li>Inside the code you may notice the exclusion of MDC15 when certain condition are met. This is simply because MDC15 is limited only to newborn and neonates and cannot be applied to cases outside the age limit. Hence the age required to be in days.</li>
   <li><em>cc</em> and <em>mcc</em> array inside getSeverity function is a list of ICD10 codes to determine the severity of the case. ICD10 codes inside CC will set the outcome to SOI2 while MCC will set to SOI3. If the ICD10 code does not fall into any one of them it will be considered as SOI1. You may add ICD10 codes to the arrays accordingly.</li>
+  <li>ICD10 codes in MCC is dominant than in CC</li>
 </ul>
 
 <p>Finally the grouper in action:</p>
@@ -258,9 +240,9 @@ else:
 
 <p>Output:</p>
 
-<p><code class="language-plaintext highlighter-rouge">DRG: 02012</code></p>
+<p><code class="language-plaintext highlighter-rouge">DRG: 02012 ORBITAL PROCEDURES (W CC)</code></p>
 
-<h5 id="notes-2">Notes</h5>
+<h5 id="notes-1">Notes</h5>
 
 <ul>
   <li>Age must be in days</li>
