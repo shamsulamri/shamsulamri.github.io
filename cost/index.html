@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cost in codes</title>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<script type="text/javascript" src="/assets/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/moment.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.mask.min.js"></script>
+
+<style>
+		html {
+		  font-size: 14px;
+		}
+		@media (min-width: 768px) {
+		  html {
+			font-size: 16px;
+		  }
+		}
+
+		.container {
+		  max-width: 960px;
+		}
+
+		.border-top { border-top: 1px solid #e5e5e5; }
+		.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+		.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2PQ43FQCD3"></script>
+<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-2PQ43FQCD3');
+</script>
+
+</head>
+<body>
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+				<h5 class="my-0 mr-md-auto font-weight-normal"><a class='text-dark' href="/">Shamsul Amri, M.D</a></h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/about">About</a>
+      </nav>
+    </div>
+		<main role="main" class="container">
+				<div class="row justify-content-center">
+				<div class='col-10'>
+						<article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Cost in codes</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Cost….</p>
+
+<div class="alert alert-secondary">
+<code>
+<pre>
+select *, average_cost_per_case/global_average_cost_per_case as cgw
+from (
+	select a.drg_code, drg_name, count(*) as case_count , avg(encounter_los) as alos, 
+		stddev(encounter_los)*2 as 2sd, min(encounter_los) as min, 
+		max(encounter_los) as max, avg(encounter_cost) as average_cost_per_case
+	from cases a
+	left join drg b on (a.drg_code = b.drg_code) 
+	group by drg_code
+) as a
+cross join (
+    select  avg(encounter_cost) as global_average_cost_per_case from cases
+) as x
+</pre>
+</code>
+</div>
+
+  </div>
+
+</article>
+
+				</div>
+				</div>
+		</main>
+				<br>
+				<br>
+</body>
+
+</html>

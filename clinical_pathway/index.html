@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinical Pathway</title>
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<script type="text/javascript" src="/assets/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/moment.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.mask.min.js"></script>
+
+<style>
+		html {
+		  font-size: 14px;
+		}
+		@media (min-width: 768px) {
+		  html {
+			font-size: 16px;
+		  }
+		}
+
+		.container {
+		  max-width: 960px;
+		}
+
+		.border-top { border-top: 1px solid #e5e5e5; }
+		.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+		.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2PQ43FQCD3"></script>
+<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-2PQ43FQCD3');
+</script>
+
+</head>
+<body>
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+				<h5 class="my-0 mr-md-auto font-weight-normal"><a class='text-dark' href="/">Shamsul Amri, M.D</a></h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/about">About</a>
+      </nav>
+    </div>
+		<main role="main" class="container">
+				<div class="row justify-content-center">
+				<div class='col-10'>
+						<article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Clinical Pathway</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Clinical pathway is a structured data entry where questions related to a particular problem will be grouped and organized to facilitate input.</p>
+
+<h4 id="problem-list">Problem List</h4>
+
+<p>This is the entry point to the application where the user select a problem which closely matches the user complain. Each case can have a single or multiple problem. For discussion purpose I will choose ‘Sore Throat’ as an example. Below is an example of a problem list.</p>
+
+<p><img src="/assets/img/clinical_pathway/problem_list.png" class="img-fluid mx-auto d-block border" /></p>
+
+<h4 id="main-input">Main Input</h4>
+
+<p>The main input page consist of a sidebar for navigation on the left and the clinical pathway on the other side. Here the inputs are broken down based on the selected problem attributes. For an example, sore throat can be defined by onset, duration or nature. The attributes will be grouped into different headers such as History of present illness, Follow-up or Exacerbating factor. Finally they will be placed into one of the primary options of Subjective, Objective or Assessment &amp; Plan (SOAP).</p>
+
+<p><img width="80%" src="/assets/img/clinical_pathway/input.png" class="img-fluid mx-auto d-block border" /></p>
+
+
+  </div>
+
+</article>
+
+				</div>
+				</div>
+		</main>
+				<br>
+				<br>
+</body>
+
+</html>
